@@ -17,12 +17,17 @@ app.get('/about', (req, res)=>{
 	res.render('about')
 })
 
-app.get('/post', (req, res)=>{                                                                                               res.render('post')
+app.get('/post', (req, res)=>{
+	res.render('post')
 })
 
-app.get('/contact', (req, res)=>{                                                                                            res.render('contact')
+app.get('/contact', (req, res)=>{
+	res.render('contact')
 })
 
+app.get('/posts/new', (req, res)=>{
+	res.render('create-post')
+})
 app.listen(4000, ()=>{
 	console.log('App listening on port 4000')
 })
