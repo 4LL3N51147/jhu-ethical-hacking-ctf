@@ -9,6 +9,8 @@ const newPostController = require('./controllers/createPost')
 const homeController = require('./controllers/home')
 const storePostController = require('./controllers/storePost')
 const getPostController = require('./controllers/getPost')
+const newUserController = require('./controllers/newUser')
+const storeUserController = require('./controllers/storeUser')
 const validateMiddleware = require('./middlewares/validationMiddleware')
 
 mongoose.connect('mongodb://localhost/my_database', {useNewUrlParser:true, useUnifiedTopology: true})
@@ -27,7 +29,11 @@ app.get('/posts/:id', getPostController)
 
 app.get('/create', newPostController)
 
+app.get('/auth/register', newUserController)
+
 app.post('/posts/store', storePostController)
+
+app.post('/users/register', storeUserController)
 
 app.listen(4000, ()=>{
 	console.log('App listening on port 4000')
