@@ -4,8 +4,12 @@ const ejs = require('ejs')
 const bodyParser = require('body-parser')
 const fileUpload = require('express-fileupload')
 const mongoose = require('mongoose')
-
 const BlogPost = require('./models/BlogPost.js')
+const newPostController = require('./controllers/createPost')
+const homeController = require('./controllers/home')
+const storePostController = require('./controllers/storePost')
+const getPostController = require('./controllers/getPost')
+const validateMiddleware = require('./middlewares/validationMiddleware')
 
 mongoose.connect('mongodb://localhost/my_database', {useNewUrlParser:true, useUnifiedTopology: true})
 
@@ -15,38 +19,15 @@ app.use(express.static('public'))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended:true}))
 app.use(fileUpload())
+app.use('posts/store', validateMiddleware)
 
-app.get('/', async (req, res)=>{
-	const blogposts = await BlogPost.find({})
-	res.render('index', {blogposts: blogposts})
-})
+app.get('/', homeController)
 
-app.get('/about', (req, res)=>{
-	res.render('about')
-})
+app.get('/posts/:id', getPostController)
 
-app.get('/posts/:id', async (req, res)=>{
-	const blogpost = await BlogPost.findById(req.params.id)
-	res.render('post', { blogpost })
-})
+app.get('/create', newPostController)
 
-app.get('/contact', (req, res)=>{
-	res.render('contact')
-})
-
-app.get('/create', (req, res)=>{
-	res.render('create-post')
-})
-
-app.post('/posts/store', async (req, res)=>{
-	let image = req.files.image
-	image.mv(path.resolve(__dirname, 'public/img', image.name), async (error)=>{
-		await BlogPost.create({...req.body, image:'/img/'+image.name}, (error, blogpost) => {
-			console.log(blogpost)
-			res.redirect('/posts/' + blogpost.id)
-		})
-	})
-})
+app.post('/posts/store', storePostController)
 
 app.listen(4000, ()=>{
 	console.log('App listening on port 4000')
