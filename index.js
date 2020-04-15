@@ -11,6 +11,8 @@ const storePostController = require('./controllers/storePost')
 const getPostController = require('./controllers/getPost')
 const newUserController = require('./controllers/newUser')
 const storeUserController = require('./controllers/storeUser')
+const loginController = require('./controllers/login')
+const loginUserController = require('./controllers/loginUser')
 const validateMiddleware = require('./middlewares/validationMiddleware')
 
 mongoose.connect('mongodb://localhost/my_database', {useNewUrlParser:true, useUnifiedTopology: true})
@@ -23,17 +25,23 @@ app.use(bodyParser.urlencoded({extended:true}))
 app.use(fileUpload())
 app.use('posts/store', validateMiddleware)
 
-app.get('/', homeController)
+app.get('/', loginController)
+
+app.get('/home', homeController)
 
 app.get('/posts/:id', getPostController)
 
 app.get('/create', newPostController)
 
-app.get('/auth/register', newUserController)
+// app.get('/auth/register', newUserController)
+
+app.get('/auth/login', loginController)
 
 app.post('/posts/store', storePostController)
 
-app.post('/users/register', storeUserController)
+// app.post('/users/register', storeUserController)
+
+app.post('/users/login', loginUserController)
 
 app.listen(4000, ()=>{
 	console.log('App listening on port 4000')
