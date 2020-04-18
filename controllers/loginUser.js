@@ -1,15 +1,23 @@
+
+const bcrypt = require('bcrypt')
 const User = require('../models/User')
 
 module.exports = (req, res)=>{
     const {username, password} = req.body
-    query = {username:username, password:password}
-    console.log(query)
-    User.findOne(query, (error, user)=>{
+
+    User.findOne({username: username}, (error, user)=>{
         if (user){
-            res.redirect('/home')
+            bcrypt.compare(password, user.password, (error, isSame)=>{
+                if (isSame) {
+                    res.redirect('/home')
+                }
+                else {
+                    res.redirect('/auth/login')
+                }
+            })
         }
         else{
-            console.log(error, user)
+            res.send('User not found')
         }
     })
 }

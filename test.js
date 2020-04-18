@@ -1,11 +1,10 @@
-const mongoose = require('mongoose')
-const BlogPost = require('./models/BlogPost')
+const express = require('express')
 
-mongoose.connect('mongodb://localhost/my_database', {useNewUrlParser:true, useUnifiedTopology: true})
+const app = new express()
 
-// BlogPost.create({title: '1',
-// 		 body: '2'}, (error, blogpost) => {
-// 			console.log(error, blogpost)
-// })
+app.get('/', (req, res)=>{
+    res.end('1')
+})
 
-console.log("2")
+app.listen(4000, ()=>{
+})
