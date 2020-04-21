@@ -9,13 +9,15 @@ module.exports = (req, res)=>{
     if (password == confirm) {
         User.create({username:username, password:password}, (error, user)=>{
             if (error) {
-                res.redirect('/auth/register')
-                res.send(error)
+                const validationErrors = Object.keys(error.errors).map(key=>error.errors[key].message)
+                req.flash('validationErrors', validationErrors)
+                req.flash('data', req.body)
+                return res.redirect('/auth/register')
             }
-            res.redirect('/')
+            return res.redirect('/')
         })
     }
     else {
-        res.send("Password and does not match!")
+        req.flash('validationErrors', validationErrors)
     }
 }

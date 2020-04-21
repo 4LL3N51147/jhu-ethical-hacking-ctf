@@ -5,6 +5,7 @@ const bodyParser = require('body-parser')
 const fileUpload = require('express-fileupload')
 const mongoose = require('mongoose')
 const expressSession = require('express-session')
+const flash = require('connect-flash')
 const BlogPost = require('./models/BlogPost.js')
 const newPostController = require('./controllers/create_post')
 const homeController = require('./controllers/home')
@@ -14,9 +15,14 @@ const newUserController = require('./controllers/newUser')
 const storeUserController = require('./controllers/storeUser')
 const loginController = require('./controllers/login')
 const loginUserController = require('./controllers/loginUser')
+const logoutController = require('./controllers/logout')
 const validateMiddleware = require('./middlewares/validationMiddleware')
+const authenticationMiddleware = require('./middlewares/authenticationMiddleware')
+const redirectIfAuthticatedMiddleware = require('./middlewares/redirectIfAuthenticatedMiddleware')
 
 mongoose.connect('mongodb://localhost/my_database', {useNewUrlParser:true, useUnifiedTopology: true, useCreateIndex: true})
+
+global.loggedIn = null
 
 const app = new express()
 app.set('view engine', 'ejs')
@@ -25,26 +31,36 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended:true}))
 app.use(expressSession({secret: 'this is the secret'}))
 app.use(fileUpload())
-app.use('posts/store', validateMiddleware)
+app.use(flash())
+app.use("*", (req, res, next)=>{
+	loggedIn = req.session.userId
+	next()
+})
 
-app.get('/', loginController)
+app.get('/', homeController)
 
 app.get('/home', homeController)
 
 app.get('/posts/:id', getPostController)
 
-app.get('/createPost', newPostController)
+app.get('/createPost', authenticationMiddleware, newPostController)
 
-app.get('/auth/register', newUserController)
+app.get('/auth/register', redirectIfAuthticatedMiddleware, newUserController)
 
-app.get('/auth/login', loginController)
+app.get('/auth/login', redirectIfAuthticatedMiddleware, loginController)
 
-app.post('/posts/store', storePostController)
+app.get('/auth/logout', logoutController)
 
-app.post('/users/register', storeUserController)
+app.post('/posts/store', authenticationMiddleware, validateMiddleware, storePostController)
 
-app.post('/users/login', loginUserController)
+app.post('/users/register', redirectIfAuthticatedMiddleware, storeUserController)
 
-app.listen(4000, ()=>{
-	console.log('App listening on port 4000')
+app.post('/users/login', redirectIfAuthticatedMiddleware, loginUserController)
+
+app.use((req, res)=>{
+	res.render('not_found')
+})
+
+app.listen(3000, ()=>{
+	console.log('App listening on port 3000')
 })
