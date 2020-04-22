@@ -2,10 +2,16 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
 const BlogPostSchema = new Schema({
-  title: String,
-  description: String,
+  title: {
+    type: String,
+    required: [true, 'Please provide a title'],
+  },
+  description: {
+    type: String,
+    required: [true, 'Please provide a description'],
+  },
   userid: {
-    type:String,
+    type:Schema.Types.ObjectId,
     ref:'User',
     required: true
   },

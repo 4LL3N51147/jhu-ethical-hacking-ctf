@@ -1,7 +1,6 @@
 module.exports = (req, res)=>{
     if (req.session.userId) {
-        console.log(req.session.userId)
-        return res.render('create_post')
+        return res.render('createPost', {errors: req.flash('createPostValidationErrors')})
     }
     res.redirect('/auth/login')
 }

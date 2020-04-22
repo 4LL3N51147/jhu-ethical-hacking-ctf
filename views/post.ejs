@@ -18,6 +18,7 @@
             <h2 class="subheading"><%= blogpost.description %></h2>
             <span class="meta">Posted by
               <a href="#"><%= blogpost.userid.username%></a> on <%= blogpost.postedDate.toDateString() %>
+              <span id="author_info" style="visibility: hidden"><%= author %></span>
             </span>
           </div>
         </div>

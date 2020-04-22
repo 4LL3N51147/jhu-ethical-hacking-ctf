@@ -8,7 +8,7 @@ module.exports = (req, res)=>{
     User.findOne({username: username, password: password}, (error, user)=>{
         if (user) {
             req.session.userId = user._id
-            return res.redirect('/')
+            return res.redirect('/home')
         }
         else {
             req.flash('loginErrors', 'Incorrect username and password combination')
