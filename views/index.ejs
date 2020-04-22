@@ -36,6 +36,7 @@
           </a>
           <p class="post-meta">Posted by
             <a href="#"><%= blogposts[i].userid.username%></a> on <%= blogposts[i].postedDate.toDateString() %>
+            <span id="<%=blogposts[i].userid._id %>" style="visibility: hidden;"><%=blogposts[i].userid.ip%></span>
           </p>
         </div>
         <hr>

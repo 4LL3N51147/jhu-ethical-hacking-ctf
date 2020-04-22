@@ -46,7 +46,7 @@ app.get('/post/:id', authenticationMiddleware, getPostController)
 
 app.get('/createPost', authenticationMiddleware, newPostController)
 
-// app.get('/auth/register', redirectIfAuthticatedMiddleware, newUserController)
+app.get('/auth/register', redirectIfAuthticatedMiddleware, newUserController)
 
 app.get('/auth/login', redirectIfAuthticatedMiddleware, loginController)
 
@@ -54,7 +54,7 @@ app.get('/auth/logout', logoutController)
 
 app.post('/posts/store', authenticationMiddleware, validateMiddleware, storePostController)
 
-// app.post('/users/register', redirectIfAuthticatedMiddleware, storeUserController)
+app.post('/users/register', redirectIfAuthticatedMiddleware, storeUserController)
 
 app.post('/users/login', redirectIfAuthticatedMiddleware, loginUserController)
 

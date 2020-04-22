@@ -1,10 +1,5 @@
-const express = require('express')
+const mongoose = require('mongoose')
+const BlogPost = require('./models/BlogPost')
+mongoose.connect('mongodb://localhost/my_database', {useNewUrlParser:true})
 
-const app = new express()
 
-app.get('/', (req, res)=>{
-    res.end('1')
-})
-
-app.listen(4000, ()=>{
-})
